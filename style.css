@@ -1,69 +1,140 @@
+/* style.css */
+/*—————————————————— CSS VARIABLES ——————————————————*/
+:root {
+  --bg: #f0f4f8;
+  --card: #fff;
+  --text: #333;
+  --accent: #1e90ff;
+  --accent-light: #e1f0ff;
+  --green: #2ed573;
+  --red: #ff4757;
+  --transition: 0.3s ease;
+}
+
+/*—————————————————— GLOBAL ——————————————————*/
+* {
+  box-sizing: border-box;
+  transition: all var(--transition);
+}
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
 }
 
-header {
-    background-color: #333;
-    padding: 10px 0;
-    text-align: center;
+/*—————————————————— CENTERING ——————————————————*/
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
 }
 
-nav a {
-    color: white;
-    margin: 0 15px;
-    text-decoration: none;
-    font-weight: bold;
+/*—————————————————— CARD ——————————————————*/
+.card {
+  background: var(--card);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+}
+.hidden { display: none; }
+.shake {
+  animation: shake 0.5s ease;
 }
 
-nav a:hover {
-    text-decoration: underline;
-}
-
-main {
-    padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-input, textarea {
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
+/*—————————————————— BUTTONS ——————————————————*/
 button {
-    margin-top: 15px;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: #fff;
+  margin-top: 1rem;
+}
+.btn-blue { background: var(--accent); }
+.btn-blue:hover { background: var(--accent-light); }
+.btn-green { background: var(--green); }
+.btn-red   { background: var(--red); }
+button:active { transform: scale(0.97); }
+
+/*—————————————————— FORM ——————————————————*/
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+label { font-weight: 600; }
+input, select, textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 1rem;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
 }
 
-button:hover {
-    background-color: #45a049;
+/* radio group */
+.radios {
+  display: flex;
+  gap: 1rem;
+}
+.radios input { margin-right: 0.25rem; }
+
+/*—————————————————— OVERLAY & SPINNER ——————————————————*/
+.overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid var(--accent-light);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 15px 0;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+/* result message */
+.result-message {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--green);
+}
+
+/*—————————————————— ANIMATIONS ——————————————————*/
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25%,75% { transform: translateX(-5px); }
+  50%     { transform: translateX(5px); }
+}
+
+/*—————————————————— RESPONSIVE ——————————————————*/
+@media (max-width: 500px) {
+  .card { padding: 1.5rem; }
+  button { width: 100%; }
 }
