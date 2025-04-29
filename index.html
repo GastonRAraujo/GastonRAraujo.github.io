@@ -1,36 +1,79 @@
+<!-- surprise.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Contact Us</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Página Secreta para Pipina</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-        </nav>
-    </header>
+  <div class="centered">
+    <!-- Welcome / Gatekeeper card -->
+    <div id="welcome-card" class="card">
+      <h1>⚠️ Warning! ⚠️</h1>
+      <p>Página para Pipina, no pasar excepto <strong>Ludy</strong></p>
+      <div class="buttons">
+        <button id="btn-yes">Soy Ludy</button>
+        <button id="btn-no">No soy Ludy<br>Salir</button>
+      </div>
+    </div>
 
-    <main>
-        <h1>Contact Us</h1>
-        <form action="https://formspree.io/f/xqaqeekz" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+    <!-- Intruder message -->
+    <div id="intruder-card" class="card hidden">
+      <h2>¡Adiós intruso! 👋</h2>
+      <p>Este sitio es sólo para Pipina.</p>
+    </div>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="_replyto" required>
+    <!-- Secret form for Ludy -->
+    <div id="form-card" class="card hidden">
+      <h2>¡Bienvenida, Ludy! 💖</h2>
+      <p>Llena esto para tu Pipino:</p>
+      <form action="https://formspree.io/f/xqaqeekz" method="POST">
+        <label for="amor">¿Cuánto quiero a mi Pipino?</label>
+        <select id="amor" name="amor" required>
+          <option value="1">1 💔</option>
+          <option value="2">2 💓</option>
+          <option value="3">3 💕</option>
+          <option value="4">4 💖</option>
+          <option value="5">5 ❤️</option>
+        </select>
 
-            <label for="message">Blabla:</label>
-            <textarea id="message" name="message" required></textarea>
+        <label>Mi Pipino es lo más:</label>
+        <div class="radios">
+          <label><input type="radio" name="lo_mas" value="Sí" required> Sí</label>
+          <label><input type="radio" name="lo_mas" value="No"> No</label>
+        </div>
 
-            <button type="submit">Send</button>
-        </form>
-    </main>
+        <label for="email">Tu email:</label>
+        <input type="email" id="email" name="_replyto" required />
 
-    <footer>
-        <p>© 2025 Your Website</p>
-    </footer>
+        <label for="message1">Déjale un mensaje a Gasty:</label>
+        <textarea id="message1" name="message1" rows="3"></textarea>
+
+        <label for="message2">Déjale un deseo a Gasty:</label>
+        <textarea id="message2" name="message2" rows="3"></textarea>
+
+        <button type="submit">Enviar 💌</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById('btn-yes');
+    const noBtn  = document.getElementById('btn-no');
+    const welcomeCard = document.getElementById('welcome-card');
+    const intruderCard = document.getElementById('intruder-card');
+    const formCard = document.getElementById('form-card');
+
+    noBtn.addEventListener('click', () => {
+      welcomeCard.classList.add('hidden');
+      intruderCard.classList.remove('hidden');
+    });
+
+    yesBtn.addEventListener('click', () => {
+      welcomeCard.classList.add('hidden');
+      formCard.classList.remove('hidden');
+    });
+  </script>
 </body>
 </html>
