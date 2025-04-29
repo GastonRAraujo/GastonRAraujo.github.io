@@ -10,28 +10,39 @@
     --transition: 0.3s ease;
   }
   
-  /*—————————————————— GLOBAL RESET ——————————————————*/
-  * {
-    box-sizing: border-box;
-    transition: all var(--transition);
-  }
-  body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-    background: black;
-    color: var(--text);
-    font-family: 'Courier New', monospace;
-  }
+/*—————————————————— GLOBAL RESET ——————————————————*/
+* {
+  box-sizing: border-box;
+  transition: all var(--transition);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  /* let the canvas show through */
+  background: transparent;
+  /* allow scrolling if needed */
+  overflow: auto;
+}
+
+body {
+  font-family: 'Courier New', monospace;
+  color: var(--text);
+  line-height: 1.5;
+}
   
-  /*—————————————————— MATRIX CANVAS ——————————————————*/
-  #matrix {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: -1;
-  }
+/*—————————————————— MATRIX CANVAS ——————————————————*/
+#matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* sit behind everything */
+  z-index: -1;
+  display: block;
+}
   
   /*—————————————————— CENTERED CARD LAYOUT ——————————————————*/
   .centered {
@@ -52,6 +63,7 @@
     max-width: 400px;
     width: 100%;
     text-align: center;
+    z-index: 1;
     animation: fadeIn 0.5s ease-out;
   }
   .hidden { display: none; }
