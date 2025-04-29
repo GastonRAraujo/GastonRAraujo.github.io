@@ -29,15 +29,15 @@
       <h2>¡Bienvenida, Ludy! 💖</h2>
       <p>Llena esto para tu Pipino:</p>
       <form action="https://formspree.io/f/xqaqeekz" method="POST">
-        <label for="amor">¿Cuánto quiero a mi Pipino?</label>
-        <select id="amor" name="amor" required>
-          <option value="1">1 💔</option>
-          <option value="2">2 💓</option>
-          <option value="3">3 💕</option>
-          <option value="4">4 💖</option>
-          <option value="5">5 ❤️</option>
-        </select>
-
+        <label>¿Cuánto quiero a mi Pipino?</label>
+        <div class="radios">
+          <label><input type="radio" name="amor" value="1" required> 1 💔</label>
+          <label><input type="radio" name="amor" value="2"> 2 💓</label>
+          <label><input type="radio" name="amor" value="3"> 3 💕</label>
+          <label><input type="radio" name="amor" value="4"> 4 💖</label>
+          <label><input type="radio" name="amor" value="5"> 5 ❤️</label>
+        </div>
+    
         <label>Mi Pipino es lo más:</label>
         <div class="radios">
           <label><input type="radio" name="lo_mas" value="Sí" required> Sí</label>
