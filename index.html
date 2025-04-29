@@ -3,18 +3,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Página Secreta para Pipina</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Matrix rain background -->
+  <canvas id="matrix"></canvas>
+
   <div class="centered">
-    <!-- Welcome / Gatekeeper card -->
+    <!-- Gatekeeper card -->
     <div id="welcome-card" class="card">
       <h1>⚠️ Warning! ⚠️</h1>
-      <p>Página para Pipina, no pasar excepto <strong>Ludy</strong></p>
+      <p>Página para Pipina — no pasar excepto <strong>Ludy</strong></p>
       <div class="buttons">
-        <button id="btn-yes">Soy Ludy</button>
-        <button id="btn-no">No soy Ludy<br>Salir</button>
+        <button id="btn-yes" class="btn-green">Soy Ludy</button>
+        <button id="btn-no" class="btn-red">No soy Ludy<br>Salir</button>
       </div>
     </div>
 
@@ -28,7 +32,7 @@
     <div id="form-card" class="card hidden">
       <h2>¡Bienvenida, Ludy! 💖</h2>
       <p>Llena esto para tu Pipino:</p>
-      <form action="https://formspree.io/f/xqaqeekz" method="POST">
+      <form id="secret-form">
         <label>¿Cuánto quiero a mi Pipino?</label>
         <div class="radios">
           <label><input type="radio" name="amor" value="1" required> 1 💔</label>
@@ -37,7 +41,7 @@
           <label><input type="radio" name="amor" value="4"> 4 💖</label>
           <label><input type="radio" name="amor" value="5"> 5 ❤️</label>
         </div>
-    
+
         <label>Mi Pipino es lo más:</label>
         <div class="radios">
           <label><input type="radio" name="lo_mas" value="Sí" required> Sí</label>
@@ -45,34 +49,95 @@
         </div>
 
         <label for="email">Tu email:</label>
-        <input type="email" id="email" name="_replyto" required />
+        <input type="email" id="email" name="_replyto" placeholder="ludy@ejemplo.com" required />
 
         <label for="message1">Déjale un mensaje a Gasty:</label>
-        <textarea id="message1" name="message1" rows="3"></textarea>
+        <textarea id="message1" name="message1" rows="3" placeholder="¡Te amo!"></textarea>
 
-        <label for="message2">Déjale un deseo a Gasty:</label>
-        <textarea id="message2" name="message2" rows="3"></textarea>
+        <label for="message2">Un deseo especial para Gasty:</label>
+        <textarea id="message2" name="message2" rows="3" placeholder="¡Sorpresa!"></textarea>
 
-        <button type="submit">Enviar 💌</button>
+        <button type="submit" class="btn-blue">Enviar 💌</button>
       </form>
+
+      <div id="overlay" class="overlay hidden">
+        <div class="spinner"></div>
+      </div>
+      <div id="result" class="result-message hidden"></div>
     </div>
   </div>
 
+  <!-- confetti + Matrix scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script>
-    const yesBtn = document.getElementById('btn-yes');
-    const noBtn  = document.getElementById('btn-no');
-    const welcomeCard = document.getElementById('welcome-card');
-    const intruderCard = document.getElementById('intruder-card');
-    const formCard = document.getElementById('form-card');
+    // —— Matrix rain setup ——
+    const canvas = document.getElementById('matrix'),
+          ctx    = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const fontSize = 16;
+    const cols = Math.floor(canvas.width / fontSize);
+    const drops = Array(cols).fill(canvas.height);
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0F0';
+      ctx.font = fontSize + 'px monospace';
+      drops.forEach((y, x) => {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, x * fontSize, y * fontSize);
+        if (y * fontSize > canvas.height && Math.random() > 0.975) drops[x] = 0;
+        drops[x]++;
+      });
+    }
+    setInterval(drawMatrix, 50);
+    window.addEventListener('resize', () => {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // —— Page logic ——
+    const yesBtn      = document.getElementById('btn-yes'),
+          noBtn       = document.getElementById('btn-no'),
+          welcomeCard = document.getElementById('welcome-card'),
+          intruderCard = document.getElementById('intruder-card'),
+          formCard    = document.getElementById('form-card'),
+          form        = document.getElementById('secret-form'),
+          overlay     = document.getElementById('overlay'),
+          result      = document.getElementById('result');
 
     noBtn.addEventListener('click', () => {
       welcomeCard.classList.add('hidden');
       intruderCard.classList.remove('hidden');
     });
-
     yesBtn.addEventListener('click', () => {
       welcomeCard.classList.add('hidden');
       formCard.classList.remove('hidden');
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      overlay.classList.remove('hidden');
+      result.classList.add('hidden');
+      const data = new FormData(form);
+      try {
+        const resp = await fetch('https://formspree.io/f/xqaqeekz', {
+          method: 'POST', headers: { 'Accept': 'application/json' }, body: data
+        });
+        if (!resp.ok) throw new Error('Network error');
+        overlay.classList.add('hidden');
+        result.textContent = '¡Gracias 💖! Tu sorpresa ha llegado.';
+        result.classList.remove('hidden');
+        confetti({ particleCount: 150, spread: 60 });
+        form.reset();
+      } catch {
+        overlay.classList.add('hidden');
+        result.textContent = '¡Uy! Algo falló. Intenta de nuevo.';
+        result.classList.remove('hidden');
+        formCard.classList.add('shake');
+        setTimeout(() => formCard.classList.remove('shake'), 500);
+      }
     });
   </script>
 </body>

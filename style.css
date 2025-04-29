@@ -1,140 +1,143 @@
 /* style.css */
-/*—————————————————— CSS VARIABLES ——————————————————*/
+/*—————————————————— MATRIX PALETTE ——————————————————*/
 :root {
-  --bg: #f0f4f8;
-  --card: #fff;
-  --text: #333;
-  --accent: #1e90ff;
-  --accent-light: #e1f0ff;
-  --green: #2ed573;
-  --red: #ff4757;
-  --transition: 0.3s ease;
-}
-
-/*—————————————————— GLOBAL ——————————————————*/
-* {
-  box-sizing: border-box;
-  transition: all var(--transition);
-}
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
-}
-
-/*—————————————————— CENTERING ——————————————————*/
-.centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 1rem;
-}
-
-/*—————————————————— CARD ——————————————————*/
-.card {
-  background: var(--card);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-  animation: fadeIn 0.5s ease-out;
-}
-.hidden { display: none; }
-.shake {
-  animation: shake 0.5s ease;
-}
-
-/*—————————————————— BUTTONS ——————————————————*/
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  color: #fff;
-  margin-top: 1rem;
-}
-.btn-blue { background: var(--accent); }
-.btn-blue:hover { background: var(--accent-light); }
-.btn-green { background: var(--green); }
-.btn-red   { background: var(--red); }
-button:active { transform: scale(0.97); }
-
-/*—————————————————— FORM ——————————————————*/
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  text-align: left;
-}
-label { font-weight: 600; }
-input, select, textarea {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-  font-size: 1rem;
-}
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-light);
-}
-
-/* radio group */
-.radios {
-  display: flex;
-  gap: 1rem;
-}
-.radios input { margin-right: 0.25rem; }
-
-/*—————————————————— OVERLAY & SPINNER ——————————————————*/
-.overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(255,255,255,0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 6px solid var(--accent-light);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-/* result message */
-.result-message {
-  margin-top: 1rem;
-  font-weight: 600;
-  color: var(--green);
-}
-
-/*—————————————————— ANIMATIONS ——————————————————*/
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-@keyframes shake {
-  0%,100% { transform: translateX(0); }
-  25%,75% { transform: translateX(-5px); }
-  50%     { transform: translateX(5px); }
-}
-
-/*—————————————————— RESPONSIVE ——————————————————*/
-@media (max-width: 500px) {
-  .card { padding: 1.5rem; }
-  button { width: 100%; }
-}
+    --bg-level: rgba(0,0,0,0.85);
+    --text: #00ff00;
+    --accent: #00ff00;
+    --accent-light: #003300;
+    --green: #00cc00;
+    --red: #ff0033;
+    --transition: 0.3s ease;
+  }
+  
+  /*—————————————————— GLOBAL RESET ——————————————————*/
+  * {
+    box-sizing: border-box;
+    transition: all var(--transition);
+  }
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: black;
+    color: var(--text);
+    font-family: 'Courier New', monospace;
+  }
+  
+  /*—————————————————— MATRIX CANVAS ——————————————————*/
+  #matrix {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+  }
+  
+  /*—————————————————— CENTERED CARD LAYOUT ——————————————————*/
+  .centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 1rem;
+  }
+  
+  /*—————————————————— GLASSY CARD ——————————————————*/
+  .card {
+    background: var(--bg-level);
+    border: 1px solid var(--accent-light);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+  }
+  .hidden { display: none; }
+  .shake { animation: shake 0.5s ease; }
+  
+  /*—————————————————— BUTTONS ——————————————————*/
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    color: #000;
+    margin: 0.5rem;
+    min-width: 120px;
+  }
+  .btn-blue  { background: var(--accent); }
+  .btn-green { background: var(--green); }
+  .btn-red   { background: var(--red); }
+  button:hover { opacity: 0.8; }
+  button:active { transform: scale(0.97); }
+  
+  /*—————————————————— FORM ——————————————————*/
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    text-align: left;
+  }
+  label { font-weight: bold; }
+  input, select, textarea {
+    padding: 0.5rem;
+    border: 1px solid var(--accent-light);
+    border-radius: 6px;
+    font-size: 1rem;
+    background: rgba(0,0,0,0.5);
+    color: var(--text);
+  }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,255,0,0.2);
+  }
+  
+  /* radio group */
+  .radios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .radios input { margin-right: 0.25rem; }
+  
+  /*—————————————————— OVERLAY & SPINNER ——————————————————*/
+  .overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .spinner {
+    width: 50px; height: 50px;
+    border: 6px solid var(--accent-light);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  .result-message {
+    margin-top: 1rem;
+    font-weight: 600;
+    color: var(--green);
+  }
+  
+  /*—————————————————— ANIMATIONS ——————————————————*/
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25%,75% { transform: translateX(-5px); }
+    50%     { transform: translateX(5px); }
+  }
+  
