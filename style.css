@@ -1,155 +1,132 @@
-/* style.css */
-/*—————————————————— MATRIX PALETTE ——————————————————*/
 :root {
-    --bg-level: rgba(0,0,0,0.85);
-    --text: #00ff00;
-    --accent: #00ff00;
-    --accent-light: #003300;
-    --green: #00cc00;
-    --red: #ff0033;
-    --transition: 0.3s ease;
-  }
-  
-/*—————————————————— GLOBAL RESET ——————————————————*/
+  /* color palette */
+  --bg-level:       rgba(0,0,0,0.85);
+  --text:           #00ff00;
+  --red:            #ff0033;
+  --green:          #00cc00;
+  --blue:           #3399FF;
+  --accent-light:   rgba(0, 51, 0, 0.8);   /* ← Define this! */
+  --transition:     0.3s ease;
+}
+
+/*———————————————— GLOBAL RESET ————————————————*/
 * {
   box-sizing: border-box;
   transition: all var(--transition);
 }
-
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  /* let the canvas show through */
   background: transparent;
-  /* allow scrolling if needed */
   overflow: auto;
 }
-
 body {
   font-family: 'Courier New', monospace;
   color: var(--text);
   line-height: 1.5;
 }
-  
-/*—————————————————— MATRIX CANVAS ——————————————————*/
+
+/*———————————————— MATRIX CANVAS ——————————————*/
 #matrix {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* sit behind everything */
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
   z-index: -1;
-  display: block;
 }
-  
-  /*—————————————————— CENTERED CARD LAYOUT ——————————————————*/
-  .centered {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 1rem;
-  }
-  
-  /*—————————————————— GLASSY CARD ——————————————————*/
-  .card {
-    background: var(--bg-level);
-    border: 1px solid var(--accent-light);
-    backdrop-filter: blur(8px);
-    padding: 2rem;
-    border-radius: 12px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    z-index: 1;
-    animation: fadeIn 0.5s ease-out;
-  }
-  .hidden { display: none; }
-  .shake { animation: shake 0.5s ease; }
-  
-  /*—————————————————— BUTTONS ——————————————————*/
-  button {
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    color: #000;
-    margin: 0.5rem;
-    min-width: 120px;
-  }
-  .btn-blue  { background: var(--accent); }
-  .btn-green { background: var(--green); }
-  .btn-red   { background: var(--red); }
-  button:hover { opacity: 0.8; }
-  button:active { transform: scale(0.97); }
-  
-  /*—————————————————— FORM ——————————————————*/
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 1rem;
-    text-align: left;
-  }
-  label { font-weight: bold; }
-  input, select, textarea {
-    padding: 0.5rem;
-    border: 1px solid var(--accent-light);
-    border-radius: 6px;
-    font-size: 1rem;
-    background: rgba(0,0,0,0.5);
-    color: var(--text);
-  }
-  input:focus, textarea:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(0,255,0,0.2);
-  }
-  
-  /* radio group */
-  .radios {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .radios input { margin-right: 0.25rem; }
-  
-  /*—————————————————— OVERLAY & SPINNER ——————————————————*/
-  .overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .spinner {
-    width: 50px; height: 50px;
-    border: 6px solid var(--accent-light);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-  .result-message {
-    margin-top: 1rem;
-    font-weight: 600;
-    color: var(--green);
-  }
-  
-  /*—————————————————— ANIMATIONS ——————————————————*/
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    25%,75% { transform: translateX(-5px); }
-    50%     { transform: translateX(5px); }
-  }
-  
+
+/*———————————————— CENTERED LAYOUT ——————————————*/
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/*———————————————— CARD STYLES ————————————————*/
+.card {
+  position: relative;
+  z-index: 1;
+  background: var(--bg-level);
+  border: 1px solid var(--accent-light);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+}
+.hidden {
+  display: none;
+}
+
+/*———————————————— BUTTON LAYOUT ——————————————*/
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;       /* space between pills */
+  margin-top: 1rem;
+}
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  min-width: 120px;
+}
+.btn-red   { background: var(--red);   color: #2b2626; }
+.btn-green { background: var(--green); color: #000; }
+.btn-blue  { background: var(--blue);  color: #c5c6c9; }
+
+button:hover {
+  opacity: 0.8;
+}
+
+/*———————————————— FORM ELEMENTS ——————————————*/
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+label {
+  font-weight: bold;
+}
+input, textarea {
+  padding: 0.5rem;
+  border: 1px solid var(--accent-light);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: rgba(0,0,0,0.5);
+  color: var(--text);
+}
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--text);
+  box-shadow: 0 0 0 3px rgba(0,255,0,0.2);
+}
+
+/*———————————————— RADIO GROUP ——————————————*/
+.radios {
+  display: flex;
+  gap: 1rem;
+}
+.radios input {
+  margin-right: 0.25rem;
+}
+
+/*———————————————— RESULT MESSAGE ——————————————*/
+.result-message {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--green);
+}
+
+/*———————————————— ANIMATIONS ——————————————*/
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,4 +1,3 @@
-<!-- surprise.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,23 +13,29 @@
   <div class="centered">
     <!-- Gatekeeper card -->
     <div id="welcome-card" class="card">
-      <h1>⚠️ Warning! ⚠️</h1>
-      <p>Página para Pipina — no pasar excepto <strong>Ludy</strong></p>
+      <h1>⚠️ No pasar excepto Ludy (the One) ⚠️</h1>
+      <p>Choose wisely</p>
       <div class="buttons">
-        <button id="btn-yes" class="btn-green">Soy Ludy</button>
-        <button id="btn-no" class="btn-red">No soy Ludy<br>Salir</button>
+        <!-- Red pill reveals the form -->
+        <button id="btn-red" class="btn-red">
+          Red pill <br> soy ludy 
+        </button>
+        <!-- Blue pill sends you away -->
+        <button id="btn-blue" class="btn-blue">
+          Blue pill<br>no soy ludy 
+        </button>
       </div>
     </div>
 
-    <!-- Intruder message -->
+    <!-- Ignorance / intruder message -->
     <div id="intruder-card" class="card hidden">
-      <h2>¡Adiós intruso! 👋</h2>
-      <p>Este sitio es sólo para Pipina.</p>
+      <h2>Has elegido la azul… 👋</h2>
+      <p>Todo vuelve a la nada. Adiós.</p>
     </div>
 
-    <!-- Secret form for Ludy -->
+    <!-- Secret form after red pill -->
     <div id="form-card" class="card hidden">
-      <h2>¡Bienvenida, Ludy! 💖</h2>
+      <h2>Bienvenida al verdadero mundo 💖</h2>
       <p>Llena esto para tu Pipino:</p>
       <form id="secret-form">
         <label>¿Cuánto quiero a mi Pipino?</label>
@@ -57,86 +62,93 @@
         <label for="message2">Un deseo especial para Gasty:</label>
         <textarea id="message2" name="message2" rows="3" placeholder="¡Sorpresa!"></textarea>
 
-        <button type="submit" class="btn-blue">Enviar 💌</button>
+        <button type="submit" class="btn-green">Enviar 💌</button>
       </form>
 
-      <div id="overlay" class="overlay hidden">
-        <div class="spinner"></div>
-      </div>
+      <!-- Result message -->
       <div id="result" class="result-message hidden"></div>
     </div>
   </div>
 
-  <!-- confetti + Matrix scripts -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script>
-    // —— Matrix rain setup ——
+    // —— Matrix rain setup with half-width katakana ——  
     const canvas = document.getElementById('matrix'),
           ctx    = canvas.getContext('2d');
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    function resizeCanvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // build our character set: U+FF66–FF9D plus A-Z0-9
+    const kana = [];
+    for (let cp = 0xFF66; cp <= 0xFF9D; cp++) {
+      kana.push(String.fromCharCode(cp));
+    }
+    const letters = kana.join('') + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const fontSize = 16;
-    const cols = Math.floor(canvas.width / fontSize);
-    const drops = Array(cols).fill(canvas.height);
+    const cols     = Math.floor(canvas.width / fontSize);
+    const drops    = Array(cols).fill(canvas.height);
+
     function drawMatrix() {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = '#0F0';
       ctx.font = fontSize + 'px monospace';
       drops.forEach((y, x) => {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, x * fontSize, y * fontSize);
+        const ch = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(ch, x * fontSize, y * fontSize);
         if (y * fontSize > canvas.height && Math.random() > 0.975) drops[x] = 0;
         drops[x]++;
       });
     }
     setInterval(drawMatrix, 50);
-    window.addEventListener('resize', () => {
-      canvas.width  = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
 
-    // —— Page logic ——
-    const yesBtn      = document.getElementById('btn-yes'),
-          noBtn       = document.getElementById('btn-no'),
-          welcomeCard = document.getElementById('welcome-card'),
+    // —— Page logic for pill decision & form ——  
+    const btnRed       = document.getElementById('btn-red'),
+          btnBlue      = document.getElementById('btn-blue'),
+          welcomeCard  = document.getElementById('welcome-card'),
           intruderCard = document.getElementById('intruder-card'),
-          formCard    = document.getElementById('form-card'),
-          form        = document.getElementById('secret-form'),
-          overlay     = document.getElementById('overlay'),
-          result      = document.getElementById('result');
+          formCard     = document.getElementById('form-card'),
+          form         = document.getElementById('secret-form'),
+          result       = document.getElementById('result');
 
-    noBtn.addEventListener('click', () => {
+    // Blue pill → forget, show intruder screen
+    btnBlue.addEventListener('click', () => {
       welcomeCard.classList.add('hidden');
       intruderCard.classList.remove('hidden');
     });
-    yesBtn.addEventListener('click', () => {
+
+    // Red pill → reveal form
+    btnRed.addEventListener('click', () => {
       welcomeCard.classList.add('hidden');
+      intruderCard.classList.add('hidden');
+      result.classList.add('hidden');
       formCard.classList.remove('hidden');
     });
 
     form.addEventListener('submit', async e => {
       e.preventDefault();
-      overlay.classList.remove('hidden');
       result.classList.add('hidden');
-      const data = new FormData(form);
+
       try {
         const resp = await fetch('https://formspree.io/f/xqaqeekz', {
-          method: 'POST', headers: { 'Accept': 'application/json' }, body: data
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(form)
         });
-        if (!resp.ok) throw new Error('Network error');
-        overlay.classList.add('hidden');
-        result.textContent = '¡Gracias 💖! Tu sorpresa ha llegado.';
+        if (!resp.ok) throw new Error();
+
+        result.textContent = '¡Gracias 💖! Revisa tu email.';
         result.classList.remove('hidden');
         confetti({ particleCount: 150, spread: 60 });
         form.reset();
       } catch {
-        overlay.classList.add('hidden');
         result.textContent = '¡Uy! Algo falló. Intenta de nuevo.';
         result.classList.remove('hidden');
-        formCard.classList.add('shake');
-        setTimeout(() => formCard.classList.remove('shake'), 500);
       }
     });
   </script>
